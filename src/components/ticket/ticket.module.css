@@ -169,12 +169,3 @@
   opacity: 0.8;
   border: 2px dashed #333;
 }
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}

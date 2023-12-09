@@ -102,16 +102,16 @@ function App() {
         groupingStates={groupingStates}
         orderingStates={orderingStates}
       />
-      {tickets?.length && users?.length ? (
+      {tickets ? (
         <Main
           activeGroupingState={activeGroupingState.value}
           activeOrderingState={activeOrderingState.value}
-          tickets={tickets}
+          tickets={tickets.length === 0 ? [] : tickets}
           users={users}
           setTickets={setTickets}
         />
       ) : (
-        <div>Loading...</div>
+        <div className='loading'>Loading...</div>
       )}
     </div>
   )

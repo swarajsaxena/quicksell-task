@@ -8,6 +8,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { SortableContext } from '@dnd-kit/sortable'
 import { useMemo, useState } from 'react'
 import NewCard from '../newCard/NewCard'
+import MoreOptions from '../moreOptions/MoreOptions'
 
 const Column = ({
   groupId,
@@ -31,6 +32,7 @@ const Column = ({
   setTickets: React.Dispatch<React.SetStateAction<TicketI[]>>
 }) => {
   let [newCardOpen, setNewCardOpen] = useState(false)
+  let [moreOptionOpen, setMoreOptionOpen] = useState(false)
   const {
     setNodeRef,
     attributes,
@@ -128,8 +130,18 @@ const Column = ({
         >
           <FiPlus />
         </div>
-        <div className={styles.colButton}>
+        <div
+          className={styles.colButton}
+          onClick={() => setMoreOptionOpen(true)}
+        >
           <FiMoreHorizontal />
+          {moreOptionOpen && (
+            <MoreOptions
+              setTickets={setTickets}
+              setMoreOptionOpen={setMoreOptionOpen}
+              tickets={tickets}
+            />
+          )}
         </div>
       </div>
 

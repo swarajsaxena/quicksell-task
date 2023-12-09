@@ -1,0 +1,35 @@
+.moreOptions {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  padding: 0.25rem;
+  z-index: 30;
+  background-color: hsl(225, 20%, 98%);
+  border-radius: 0.5rem;
+  border: 1px solid #e9e9eb;
+  box-shadow: 0 0 7.5px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  animation: fadeIn 200ms ease forwards;
+}
+
+.moreOptions div {
+  width: max-content;
+  padding: 0.25rem 0.5rem;
+  width: auto;
+  border-radius: 0.25rem;
+  background-color: hsl(225, 20%, 95%);
+}
+
+.moreOptions div:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: red;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -4,3 +4,10 @@
   overflow-y: hidden;
   overflow-x: hidden;
 }
+
+.loading {
+  width: auto;
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
