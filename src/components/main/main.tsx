@@ -52,7 +52,7 @@ const Main = ({
   users: UserI[]
   activeGroupingState: string
   activeOrderingState: string
-  setTickets: (val: any) => void
+  setTickets: React.Dispatch<React.SetStateAction<TicketI[]>>
 }) => {
   let [statuses] = useState([
     'Backlog',
@@ -104,7 +104,7 @@ const Main = ({
   let [priorityColumns, setPriorityColumns] = useState(
     Object.keys(priorities).map((priority: string, index: any) => ({
       icon: priorities[priority].img,
-      groupId: priorities[priority].label,
+      groupId: priority,
       key: index,
       tickets: tickets
         .filter((value) => String(value.priority) === priority)
@@ -164,7 +164,7 @@ const Main = ({
     setPriorityColumns(
       Object.keys(priorities).map((priority: string, index: any) => ({
         icon: priorities[priority].img,
-        groupId: priorities[priority].label,
+        groupId: priority,
         key: index,
         tickets: tickets
           .filter((value) => String(value.priority) === priority)
@@ -196,14 +196,9 @@ const Main = ({
   )
 
   const onDragStart = (event: DragStartEvent) => {
-    setactiveTicket(null)
-    setActiveColumn(null)
-
     if (event.active.data.current?.type === 'Column') {
       setActiveColumn(event.active.data.current.column)
-      console.log()
     }
-
     if (event.active.data.current?.type === 'Ticket') {
       setactiveTicket(event.active.data.current.ticket)
     }
@@ -212,7 +207,6 @@ const Main = ({
   const onDragEnd = (event: DragEndEvent) => {
     setactiveTicket(null)
     setActiveColumn(null)
-
     const { over, active } = event
     if (!over) return
 
@@ -290,18 +284,7 @@ const Main = ({
             tickets[activeIndex].status = tickets[overIndex].status
             break
           case 'user':
-            console.log(
-              'before',
-              tickets[activeIndex].userId,
-              tickets[overIndex].userId
-            )
             tickets[activeIndex].userId = tickets[overIndex].userId
-            console.log(
-              'after',
-              tickets[activeIndex].userId,
-              tickets[overIndex].userId
-            )
-
             break
           case 'priority':
             tickets[activeIndex].priority = tickets[overIndex].priority
@@ -409,13 +392,16 @@ const Main = ({
             {activeTicket && (
               <Ticket
                 setTickets={setTickets}
-                {...activeTicket}
+                activeGroupingState={activeTicket.activeGroupingState}
+                index={activeTicket.index}
+                priorityImage={activeTicket.priorityImage}
+                users={activeTicket.users}
+                ticket={activeTicket.ticket}
               />
             )}
           </DragOverlay>,
           document.body
         )}
-        {createPortal(<DragOverlay></DragOverlay>, document.body)}
       </div>
     </DndContext>
   )

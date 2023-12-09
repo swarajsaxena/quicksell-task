@@ -4,7 +4,7 @@ import styles from './ticket.module.css'
 import { useState, useRef, useEffect } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { RxDragHandleDots2 } from 'react-icons/rx'
+import { RxDragHandleDots2, RxTrash } from 'react-icons/rx'
 import useOutsideClick from '../../hooks/OutslideClickHook'
 
 const Ticket = ({
@@ -20,7 +20,7 @@ const Ticket = ({
   priorityImage: string
   activeGroupingState: string
   index: number
-  setTickets: (val: any) => void
+  setTickets: React.Dispatch<React.SetStateAction<TicketI[]>>
 }) => {
   let [user] = useState(users.find((user) => user.id === ticket.userId))
   let [editingActive, setEditingActive] = useState(false)
@@ -85,7 +85,7 @@ const Ticket = ({
 
   return (
     <div
-      className={styles.ticket}
+      className={`${styles.ticket} ${isDragging ? styles.dragging : ''}`}
       ref={setNodeRef}
       style={{ ...stylesDnd }}
     >
@@ -144,10 +144,20 @@ const Ticket = ({
             className={styles.priority}
           />
         )}
-        <span className={styles.tag}>
-          <div className={styles.dot} />
-          {ticket.tag}
-        </span>
+        {ticket.tag.map((t) => (
+          <span className={styles.tag}>
+            <div className={styles.dot} />
+            {t}
+          </span>
+        ))}
+      </div>
+      <div
+        className={styles.delete}
+        onClick={() =>
+          setTickets((prev) => prev.filter((t) => t.id !== ticket.id))
+        }
+      >
+        <RxTrash />
       </div>
       <div
         {...attributes}

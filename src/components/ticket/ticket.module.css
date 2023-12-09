@@ -98,6 +98,7 @@
   gap: 0.5rem;
   margin-top: auto;
   padding-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .status {
@@ -149,4 +150,31 @@
 .input {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.delete {
+  position: absolute;
+  bottom: 0;
+  right: 1.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 0.2;
+  transition: all 200ms ease;
+}
+.ticket:hover .delete {
+  opacity: 1;
+}
+
+.dragging {
+  opacity: 0.8;
+  border: 2px dashed #333;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

@@ -6,7 +6,8 @@ import { colorArray } from '../../constant'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { SortableContext } from '@dnd-kit/sortable'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import NewCard from '../newCard/NewCard'
 
 const Column = ({
   groupId,
@@ -27,8 +28,9 @@ const Column = ({
   priorityImage: Record<string, { img: string; label: string }>
   activeGroupingState: string
   activeOrderingState: string
-  setTickets: (val: TicketI[]) => void
+  setTickets: React.Dispatch<React.SetStateAction<TicketI[]>>
 }) => {
+  let [newCardOpen, setNewCardOpen] = useState(false)
   const {
     setNodeRef,
     attributes,
@@ -112,19 +114,16 @@ const Column = ({
             />
           </>
         )}
-        <span>{groupId}</span>
+        <span>
+          {activeGroupingState === 'priority'
+            ? priorityImage[groupId].label
+            : activeGroupingState === 'user'
+            ? users.find((user) => user.id == groupId).name
+            : groupId}
+        </span>
         <span className={styles.length}>{tickets.length}</span>
         <div
-          onClick={() => {
-            const newTicket: TicketI = {
-              title: '',
-              id: '',
-              priority: 1,
-              status: '',
-              tag: [''],
-              userId: '',
-            }
-          }}
+          onClick={() => setNewCardOpen(true)}
           className={styles.colButton + ' ' + styles.x}
         >
           <FiPlus />
@@ -135,6 +134,14 @@ const Column = ({
       </div>
 
       <div className={styles.tickets}>
+        {newCardOpen && (
+          <NewCard
+            setTickets={setTickets}
+            activeGroupingState={activeGroupingState}
+            defaultProperty={groupId}
+            setNewCardOpen={setNewCardOpen}
+          />
+        )}
         <SortableContext items={ticketIds}>
           {tickets
             .sort((a, b) => {

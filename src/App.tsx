@@ -59,7 +59,6 @@ function App() {
     const localTickets = localStorage.getItem('tickets')
     const localUsers = localStorage.getItem('users')
     const loadCounter = localStorage.getItem('load_counter')
-    console.log(loadCounter, loadCounter === '1')
 
     if (loadCounter === '1') {
       setTickets(
@@ -80,17 +79,15 @@ function App() {
 
   useEffect(() => {
     const loadCount = localStorage.getItem('load_counter')
-    console.log(loadCount)
 
-    if (loadCount === '1') {
+    if (loadCount === '1' && tickets != null) {
       localStorage.setItem('tickets', JSON.stringify(tickets))
     }
   }, [tickets])
 
   useEffect(() => {
     const loadCount = localStorage.getItem('load_counter')
-    console.log(loadCount)
-    if (loadCount === '1') {
+    if (loadCount === '1' && users != null) {
       localStorage.setItem('users', JSON.stringify(users))
     }
   }, [users])

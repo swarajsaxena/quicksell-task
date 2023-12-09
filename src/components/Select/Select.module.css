@@ -1,6 +1,7 @@
 .select {
   display: flex;
   position: relative;
+  width: 100%;
 }
 
 .button {
@@ -16,6 +17,8 @@
   cursor: pointer;
   color: grey;
   font-size: 0.9rem;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .label {
