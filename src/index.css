@@ -1,0 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: hsl(225, 22%, 96%);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+  line-height: 1.5;
+  font-weight: 400;
+}

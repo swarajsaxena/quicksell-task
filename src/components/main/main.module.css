@@ -1,0 +1,7 @@
+.main {
+  height: 100%;
+  display: flex;
+  gap: 1rem;
+  padding: 0 3rem 1.5rem 3rem;
+  overflow-x: scroll;
+}

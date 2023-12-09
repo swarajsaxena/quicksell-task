@@ -1,0 +1,66 @@
+.topbar {
+  background: #ffffff;
+  padding: 1rem 3rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.slider {
+  transform: rotate(90deg);
+}
+
+.button {
+  width: max-content;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  border-radius: 0.25rem;
+  border: 1px solid #dbdbde;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dialog {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  background: hsl(220, 27%, 98%);
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  border: 1px solid #dbdbde;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 5;
+  opacity: 0;
+  /* transform: translateY(20); */
+  animation: fadeIn 200ms ease forwards;
+}
+
+.optionRow {
+  display: flex;
+}
+
+.optionLabel {
+  font-weight: 500;
+  opacity: 0.6;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
