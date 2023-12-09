@@ -23,7 +23,10 @@ const MoreOptions = ({
   }
 
   return (
-    <div className={styles.moreOptions}>
+    <div
+      ref={ref}
+      className={styles.moreOptions}
+    >
       <div
         onClick={(event: React.MouseEvent<HTMLDivElement>) => {
           event.stopPropagation()
