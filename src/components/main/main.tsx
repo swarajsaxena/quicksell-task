@@ -1,5 +1,5 @@
 import { TicketI, UserI } from '../../App'
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './main.module.css'
 import Column from '../column/Column'
@@ -14,7 +14,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { SortableContext, arrayMove } from '@dnd-kit/sortable'
+import { SortableContext } from '@dnd-kit/sortable'
 import Ticket from '../ticket/Ticket'
 
 type ActiveColumnT = {
@@ -185,14 +185,16 @@ const Main = ({
   let [activeColumn, setActiveColumn] = useState<ActiveColumnT | null>(null)
   let [activeTicket, setactiveTicket] = useState<ActiveTicketT | null>()
 
-  const statusColumnIds = useMemo(() => statuses.map((status) => status), [])
-  const userColumnIds = useMemo(() => users.map((user: UserI) => user.name), [])
-  const priorityColumnIds = useMemo(
-    () =>
-      Object.keys(priorities).map(
-        (priority: string) => priorities[priority].label
-      ),
-    []
+  const [statusColumnIds, setStatusColumnsIds] = useState(
+    statuses.map((status) => status)
+  )
+  const [userColumnIds, setUserColumnsIds] = useState(
+    users.map((user: UserI) => user.id)
+  )
+  const [priorityColumnIds, setPriorityColumnsIds] = useState(
+    Object.keys(priorities).map(
+      (priority: string) => priorities[priority].label
+    )
   )
 
   const onDragStart = (event: DragStartEvent) => {
@@ -205,62 +207,67 @@ const Main = ({
   }
 
   const onDragEnd = (event: DragEndEvent) => {
-    setactiveTicket(null)
-    setActiveColumn(null)
     const { over, active } = event
     if (!over) return
 
     const activeColId = active.id
     const overColId = over.id
 
+    console.log('onDragEnd', activeColId, overColId)
+
     if (activeColId === overColId) return
 
     if (activeGroupingState === 'status') {
-      setStatusColumns((columns) => {
-        const activeColumnIndex = columns.findIndex(
-          (col) => col.groupId === activeColId
-        )
-        const overColumnIndex = columns.findIndex(
-          (col) => col.groupId === overColId
-        )
+      console.log('status')
 
-        return arrayMove(columns, activeColumnIndex, overColumnIndex)
+      setStatusColumnsIds((columnIds) => {
+        const activeColumnIndex = columnIds.findIndex(
+          (col) => col === activeColId
+        )
+        const overColumnIndex = columnIds.findIndex((col) => col === overColId)
+        return swapElements(columnIds, activeColumnIndex, overColumnIndex)
       })
     }
 
     if (activeGroupingState === 'user') {
-      setUserColumns((columns) => {
-        const activeColumnIndex = columns.findIndex(
-          (col) => col.groupId === activeColId
-        )
-        const overColumnIndex = columns.findIndex(
-          (col) => col.groupId === overColId
-        )
+      setUserColumnsIds((columnIds) => {
+        const activeColumnIndex = columnIds.findIndex((col) => {
+          return col === activeColId
+        })
+        const overColumnIndex = columnIds.findIndex((col) => col === overColId)
 
-        return arrayMove(columns, activeColumnIndex, overColumnIndex)
+        return swapElements(columnIds, activeColumnIndex, overColumnIndex)
       })
     }
 
     if (activeGroupingState === 'priority') {
-      setPriorityColumns((columns) => {
-        const activeColumnIndex = columns.findIndex(
-          (col) => col.groupId === activeColId
-        )
-        const overColumnIndex = columns.findIndex(
-          (col) => col.groupId === overColId
-        )
+      setPriorityColumnsIds((columnIds) => {
+        const activeColumnIndex = columnIds.findIndex((col) => {
+          return col === priorities[activeColId].label
+        })
+        const overColumnIndex = columnIds.findIndex((col) => {
+          return col === priorities[overColId].label
+        })
 
-        return arrayMove(columns, activeColumnIndex, overColumnIndex)
+        return swapElements(columnIds, activeColumnIndex, overColumnIndex)
       })
     }
+
+    setactiveTicket(null)
+    setActiveColumn(null)
   }
 
   const onDagOver = (event: DragOverEvent) => {
+    console.log(event.over.data.current?.type)
+
     const { over, active } = event
+
     if (!over) return
 
     const activeId = String(active.id)
     const overId = String(over.id)
+
+    console.log('onDagOver', activeId, overId)
 
     if (activeId === overId) return
 
@@ -298,7 +305,6 @@ const Main = ({
     }
 
     // dropping task over column
-
     const isOverAtColumn = over.data.current?.type === 'Column'
     if (isActiveATicket && isOverAtColumn) {
       setTickets((tickets: TicketI[]) => {
@@ -332,7 +338,6 @@ const Main = ({
       },
     })
   )
-
   return (
     <DndContext
       onDragStart={onDragStart}
@@ -344,12 +349,12 @@ const Main = ({
         {activeGroupingState === 'status' ? (
           <>
             <SortableContext items={statusColumnIds}>
-              {statusColumns.map((column) => (
+              {statusColumnIds.map((columnId) => (
                 <Column
                   setTickets={setTickets}
                   activeGroupingState={activeGroupingState}
                   activeOrderingState={activeOrderingState}
-                  {...column}
+                  {...statusColumns.find((col) => col.groupId === columnId)}
                 />
               ))}
             </SortableContext>
@@ -357,12 +362,12 @@ const Main = ({
         ) : activeGroupingState === 'user' ? (
           <>
             <SortableContext items={userColumnIds}>
-              {userColumns.map((column) => (
+              {userColumnIds.map((columnId) => (
                 <Column
                   setTickets={setTickets}
                   activeGroupingState={activeGroupingState}
                   activeOrderingState={activeOrderingState}
-                  {...column}
+                  {...userColumns.find((col) => col.groupId === columnId)}
                 />
               ))}
             </SortableContext>
@@ -370,12 +375,14 @@ const Main = ({
         ) : (
           <>
             <SortableContext items={priorityColumnIds}>
-              {priorityColumns.map((column) => (
+              {priorityColumnIds.map((columnId) => (
                 <Column
                   setTickets={setTickets}
                   activeGroupingState={activeGroupingState}
                   activeOrderingState={activeOrderingState}
-                  {...column}
+                  {...priorityColumns.find(
+                    (col) => priorities[col.groupId].label === columnId
+                  )}
                 />
               ))}
             </SortableContext>

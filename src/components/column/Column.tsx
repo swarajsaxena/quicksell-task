@@ -58,7 +58,7 @@ const Column = ({
   })
 
   const ticketIds = useMemo(() => {
-    return tickets.map((ticket) => ticket.id)
+    return tickets ? tickets.map((ticket) => ticket.id) : []
   }, [tickets])
 
   const stylesDnd = {

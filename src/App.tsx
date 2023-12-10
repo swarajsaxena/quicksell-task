@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import TopBar from './components/Topbar/TopBar'
-import Main from './components/main/main'
 import { TICKETS, USERS } from './constant'
+import Main from './components/main/main'
 
 export interface TicketI {
   id: string
