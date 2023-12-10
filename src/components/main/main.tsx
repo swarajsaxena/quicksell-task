@@ -207,19 +207,17 @@ const Main = ({
   }
 
   const onDragEnd = (event: DragEndEvent) => {
+    setactiveTicket(null)
+    setActiveColumn(null)
     const { over, active } = event
     if (!over) return
 
     const activeColId = active.id
     const overColId = over.id
 
-    console.log('onDragEnd', activeColId, overColId)
-
     if (activeColId === overColId) return
 
     if (activeGroupingState === 'status') {
-      console.log('status')
-
       setStatusColumnsIds((columnIds) => {
         const activeColumnIndex = columnIds.findIndex(
           (col) => col === activeColId
@@ -252,22 +250,15 @@ const Main = ({
         return swapElements(columnIds, activeColumnIndex, overColumnIndex)
       })
     }
-
-    setactiveTicket(null)
-    setActiveColumn(null)
   }
 
   const onDagOver = (event: DragOverEvent) => {
-    console.log(event.over.data.current?.type)
-
     const { over, active } = event
 
     if (!over) return
 
     const activeId = String(active.id)
     const overId = String(over.id)
-
-    console.log('onDagOver', activeId, overId)
 
     if (activeId === overId) return
 
